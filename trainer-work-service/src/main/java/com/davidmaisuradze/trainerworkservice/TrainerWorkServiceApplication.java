@@ -1,5 +1,6 @@
 package com.davidmaisuradze.trainerworkservice;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

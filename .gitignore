@@ -12,6 +12,10 @@ target/
 .mvn/
 mvnw
 mvnw.cmd
+HELP.md
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
 # macOS
 .DS_Store

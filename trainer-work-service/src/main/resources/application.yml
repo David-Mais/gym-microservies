@@ -1,0 +1,22 @@
+spring:
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:trainerdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password: pass
+    driver-class-name: org.h2.Driver
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.hibernate.format_sql: true
+    open-in-view: true
+  sql:
+    init:
+      mode: always
+
+server:
+  port: 8081
