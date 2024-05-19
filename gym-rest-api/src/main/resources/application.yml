@@ -1,0 +1,40 @@
+spring:
+  profiles:
+    active: dev
+  jpa:
+    show-sql: true
+    open-in-view: true
+
+logging:
+  level:
+    root: info
+    org:
+      springframework:
+        boot:
+          web: info
+        security: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,custom
+  endpoint:
+    health:
+      show-details: always
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+security:
+  jwt:
+    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'
+    expiration: 20000000 # 1000 * 60 * 24 = 24 HOURS
+  login:
+    max-attempts: 3
+    timeout: 30 #minutes
