@@ -1,12 +1,14 @@
 package com.davidmaisuradze.gymapplication.service.impl;
 
+import com.davidmaisuradze.gymapplication.client.WorkloadServiceClient;
 import com.davidmaisuradze.gymapplication.dto.training.CreateTrainingDto;
 import com.davidmaisuradze.gymapplication.dto.workload.ActionType;
-import com.davidmaisuradze.gymapplication.dto.workload.TrainerWorkloadRequestDto;
+import com.davidmaisuradze.gymapplication.dto.workload.TrainerWorkloadRequest;
 import com.davidmaisuradze.gymapplication.entity.Trainee;
 import com.davidmaisuradze.gymapplication.entity.Trainer;
 import com.davidmaisuradze.gymapplication.entity.Training;
 import com.davidmaisuradze.gymapplication.entity.TrainingType;
+import com.davidmaisuradze.gymapplication.mapper.TrainingMapper;
 import com.davidmaisuradze.gymapplication.repository.TrainingRepository;
 import com.davidmaisuradze.gymapplication.service.TraineeService;
 import com.davidmaisuradze.gymapplication.service.TrainerService;
@@ -15,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 
@@ -27,7 +28,8 @@ public class TrainingServiceImpl implements TrainingService {
     private final TraineeService traineeService;
     private final TrainerService trainerService;
     private final TrainingRepository trainingRepository;
-    private final RestTemplate restTemplate;
+    private final TrainingMapper trainingMapper;
+    private final WorkloadServiceClient workloadServiceClient;
 
     @Override
     @Transactional
@@ -51,19 +53,10 @@ public class TrainingServiceImpl implements TrainingService {
 
         trainingRepository.save(training);
 
-        String username = trainer.getUsername();
-        TrainerWorkloadRequestDto workloadRequestDto = TrainerWorkloadRequestDto
-                .builder()
-                .username(username)
-                .firstName(trainer.getFirstName())
-                .lastName(trainer.getLastName())
-                .isActive(trainer.getIsActive())
-                .trainingDate(trainingDate)
-                .durationMinutes(duration)
-                .actionType(ActionType.ADD)
-                .build();
-        String workloadServiceUrl = "http://localhost:8081/api/v1/trainers/" + username;
-        restTemplate.postForEntity(workloadServiceUrl, workloadRequestDto, Void.class);
+        TrainerWorkloadRequest workloadRequest = trainingMapper.trainingToTrainerWorkloadRequest(training);
+        workloadRequest.setActionType(ActionType.ADD);
+
+        workloadServiceClient.sendWorkload(workloadRequest);
     }
 
     private Trainee findTraineeProfileByUsername(String username) {

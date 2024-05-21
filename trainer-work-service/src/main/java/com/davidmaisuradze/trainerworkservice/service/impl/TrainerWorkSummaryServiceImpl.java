@@ -1,7 +1,7 @@
 package com.davidmaisuradze.trainerworkservice.service.impl;
 
 import com.davidmaisuradze.trainerworkservice.dto.ActionType;
-import com.davidmaisuradze.trainerworkservice.dto.TrainerWorkloadRequestDto;
+import com.davidmaisuradze.trainerworkservice.dto.TrainerWorkloadRequest;
 import com.davidmaisuradze.trainerworkservice.dto.WorkSummaryDto;
 import com.davidmaisuradze.trainerworkservice.entity.MonthlySummary;
 import com.davidmaisuradze.trainerworkservice.entity.TrainerWorkSummary;
@@ -40,7 +40,8 @@ public class TrainerWorkSummaryServiceImpl implements TrainerWorkSummaryService 
     }
 
     @Override
-    public void addWorkload(String username, TrainerWorkloadRequestDto requestDto) {
+    public void addWorkload(TrainerWorkloadRequest requestDto) {
+        String username = requestDto.getUsername();
         Optional<TrainerWorkSummary> trainerOptional = trainerRepository.findByUsername(username);
         TrainerWorkSummary trainer = getTrainerWorkSummary(requestDto, trainerOptional);
 
@@ -82,7 +83,7 @@ public class TrainerWorkSummaryServiceImpl implements TrainerWorkSummaryService 
         trainerRepository.save(trainer);
     }
 
-    private TrainerWorkSummary getTrainerWorkSummary(TrainerWorkloadRequestDto requestDto, Optional<TrainerWorkSummary> trainerOptional) {
+    private TrainerWorkSummary getTrainerWorkSummary(TrainerWorkloadRequest requestDto, Optional<TrainerWorkSummary> trainerOptional) {
         TrainerWorkSummary trainer;
 
         if (trainerOptional.isPresent()) {

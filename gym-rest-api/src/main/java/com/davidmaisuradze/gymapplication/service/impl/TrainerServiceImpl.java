@@ -76,7 +76,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public TrainerProfileDto getProfile(String username) {
         Trainer trainer = getTrainer(username);
         TrainerProfileDto trainerProfile = trainerMapper.trainerToTrainerProfileDto(trainer);
@@ -88,7 +88,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public TrainerProfileUpdateResponseDto updateProfile(
             String username,
             TrainerProfileUpdateRequestDto requestDto
@@ -106,7 +106,7 @@ public class TrainerServiceImpl implements TrainerService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public void updateActiveStatus(String username, ActiveStatusDto activeStatusDto) {
         boolean isActive = activeStatusDto.getIsActive();
         Trainer trainer = getTrainer(username);
@@ -116,7 +116,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public List<TrainerInfoDto> getTrainersNotAssigned(String username) {
         if (traineeNotExists(username)) {
             throw new GymException("Trainer not found with username: " + username, "404");
@@ -129,7 +129,7 @@ public class TrainerServiceImpl implements TrainerService {
     }
 
     @Override
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public List<TrainingInfoDto> getTrainingsList(String username, TrainerTrainingSearchDto criteria) {
         trainingSearchValidator(username, criteria);
 

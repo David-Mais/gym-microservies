@@ -17,6 +17,20 @@ spring:
   sql:
     init:
       mode: always
+  application:
+    name: trainer-work-service
 
 server:
   port: 8081
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+
+security:
+  jwt:
+    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'

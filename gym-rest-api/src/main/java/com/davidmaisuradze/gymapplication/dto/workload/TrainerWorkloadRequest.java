@@ -1,4 +1,4 @@
-package com.davidmaisuradze.trainerworkservice.dto;
+package com.davidmaisuradze.gymapplication.dto.workload;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-public class TrainerWorkloadRequestDto {
+public class TrainerWorkloadRequest {
     private String username;
     private String firstName;
     private String lastName;

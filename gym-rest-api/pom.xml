@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.davidmaisuradze</groupId>
@@ -20,6 +20,10 @@
         <java.version>17</java.version>
         <spring.version>6.1.5</spring.version>
         <spring-boot.version>3.2.4</spring-boot.version>
+        <spring-cloud.version>4.1.1</spring-cloud.version>
+
+        <resilience-spring.version>2.2.0</resilience-spring.version>
+        <circuitbreaker-resilience4j.version>3.1.1</circuitbreaker-resilience4j.version>
 
         <!-- Swagger -->
         <springdoc-openapi-starter-webmvc-ui.version>2.5.0</springdoc-openapi-starter-webmvc-ui.version>
@@ -89,6 +93,31 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Spring cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+
+
+        <!-- Circuit Breaker -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>${resilience-spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+            <version>${circuitbreaker-resilience4j.version}</version>
         </dependency>
 
 

@@ -1,5 +1,6 @@
 package com.davidmaisuradze.gymapplication.service.impl;
 
+import com.davidmaisuradze.gymapplication.client.WorkloadServiceClient;
 import com.davidmaisuradze.gymapplication.dto.ActiveStatusDto;
 import com.davidmaisuradze.gymapplication.dto.security.RegistrationResponse;
 import com.davidmaisuradze.gymapplication.dto.trainee.CreateTraineeDto;
@@ -9,6 +10,8 @@ import com.davidmaisuradze.gymapplication.dto.trainee.TraineeProfileUpdateRespon
 import com.davidmaisuradze.gymapplication.dto.trainer.TrainerInfoDto;
 import com.davidmaisuradze.gymapplication.dto.training.TrainingInfoDto;
 import com.davidmaisuradze.gymapplication.dto.training.TrainingSearchCriteria;
+import com.davidmaisuradze.gymapplication.dto.workload.ActionType;
+import com.davidmaisuradze.gymapplication.dto.workload.TrainerWorkloadRequest;
 import com.davidmaisuradze.gymapplication.entity.Trainee;
 import com.davidmaisuradze.gymapplication.entity.Training;
 import com.davidmaisuradze.gymapplication.exception.GymException;
@@ -25,6 +28,7 @@ import com.davidmaisuradze.gymapplication.service.TraineeService;
 import com.davidmaisuradze.gymapplication.util.DetailsGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,7 @@ public class TraineeServiceImpl implements TraineeService {
     private final TrainingTypeMapper trainingTypeMapper;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final WorkloadServiceClient workloadServiceClient;
 
     @Override
     @Transactional
@@ -71,7 +76,7 @@ public class TraineeServiceImpl implements TraineeService {
     }
 
     @Override
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public TraineeProfileDto getProfile(String username) {
         Trainee trainee = getTrainee(username);
         TraineeProfileDto profileDto = traineeMapper.traineeToTraineeProfileDto(trainee);
@@ -82,7 +87,7 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public TraineeProfileUpdateResponseDto updateProfile(
             String username,
             TraineeProfileUpdateRequestDto updateRequestDto
@@ -100,15 +105,17 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public void deleteByUsername(String username) {
+        removeAllFutureTrainings(username);
+
         Trainee traineeToDelete = getTrainee(username);
         traineeRepository.delete(traineeToDelete);
     }
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public void updateActiveStatus(String username, ActiveStatusDto activeStatusDto) {
         Trainee trainee = getTrainee(username);
         trainee.setIsActive(activeStatusDto.getIsActive());
@@ -117,7 +124,7 @@ public class TraineeServiceImpl implements TraineeService {
 
     @Override
     @Transactional
-//    @PreAuthorize("#username == authentication.principal.username")
+    @PreAuthorize("#username == authentication.principal.username")
     public List<TrainingInfoDto> getTrainingsList(String username, TrainingSearchCriteria criteria) {
         trainingSearchValidator(username, criteria);
 
@@ -217,6 +224,22 @@ public class TraineeServiceImpl implements TraineeService {
         }
         if (criteria.getTrainingTypeName() != null && (!trainingTypeExists(criteria.getTrainingTypeName()))) {
             throw new GymException("Training type not found with name: " + criteria.getTrainingTypeName(), "404");
+        }
+    }
+
+    private void removeAllFutureTrainings(String username) {
+        LocalDate today = LocalDate.now();
+        List<Training> trainings = traineeRepository.getTrainingsList(
+                username.toLowerCase(),
+                today,
+                null,
+                null,
+                null
+        );
+        for (Training training : trainings) {
+            TrainerWorkloadRequest request = trainingMapper.trainingToTrainerWorkloadRequest(training);
+            request.setActionType(ActionType.DELETE);
+            workloadServiceClient.sendWorkload(request);
         }
     }
 }

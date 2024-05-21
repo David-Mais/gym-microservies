@@ -46,57 +46,48 @@ public class SecurityConfig {
     private final UserDetailsService userDetailsService;
     private final LogoutHandler logoutHandler;
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(AbstractHttpConfigurer::disable)
-//                .headers(headers -> headers
-//                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
-//                )
-//                .authorizeHttpRequests(request -> request
-//                        .requestMatchers("/h2-console/**").permitAll()
-//                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
-//                        .requestMatchers("/api/v1/auth/login").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/api/v1/trainees", "/api/v1/trainers").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .sessionManagement(session -> session
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                )
-//                .logout(l -> l.logoutUrl("/api/v1/auth/logout")
-//                        .addLogoutHandler(logoutHandler)
-//                        .logoutSuccessHandler(
-//                                (request, response, authentication) -> SecurityContextHolder.clearContext()
-//                        ))
-//                .exceptionHandling(configurer -> {
-//                    AuthenticationEntryPoint entryPoint = (request, response, authException) ->
-//                            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, new ErrorDto("Token is missing or invalid.", "401"));
-//
-//                    AccessDeniedHandler accessDeniedHandler = (request, response, accessDeniedException) -> {
-//                        if ("Bad credentials".equals(accessDeniedException.getMessage())) {
-//                            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, new ErrorDto("Bad credentials", "401"));
-//                        } else {
-//                            writeErrorResponse(response, HttpStatus.FORBIDDEN, new ErrorDto("Access denied", "403"));
-//                        }
-//                    };
-//                    configurer
-//                            .authenticationEntryPoint(entryPoint)
-//                            .accessDeniedHandler(accessDeniedHandler);
-//                })
-//                .httpBasic(withDefaults());
-//
-//        http.authenticationProvider(authenticationProvider());
-//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests.anyRequest().permitAll())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                )
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/trainees", "/api/v1/trainers").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .logout(l -> l.logoutUrl("/api/v1/auth/logout")
+                        .addLogoutHandler(logoutHandler)
+                        .logoutSuccessHandler(
+                                (request, response, authentication) -> SecurityContextHolder.clearContext()
+                        ))
+                .exceptionHandling(configurer -> {
+                    AuthenticationEntryPoint entryPoint = (request, response, authException) ->
+                            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, new ErrorDto("Token is missing or invalid.", "401"));
+
+                    AccessDeniedHandler accessDeniedHandler = (request, response, accessDeniedException) -> {
+                        if ("Bad credentials".equals(accessDeniedException.getMessage())) {
+                            writeErrorResponse(response, HttpStatus.UNAUTHORIZED, new ErrorDto("Bad credentials", "401"));
+                        } else {
+                            writeErrorResponse(response, HttpStatus.FORBIDDEN, new ErrorDto("Access denied", "403"));
+                        }
+                    };
+                    configurer
+                            .authenticationEntryPoint(entryPoint)
+                            .accessDeniedHandler(accessDeniedHandler);
+                })
+                .httpBasic(withDefaults());
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

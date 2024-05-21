@@ -2,6 +2,7 @@ package com.davidmaisuradze.gymapplication.config;
 
 import com.davidmaisuradze.gymapplication.config.logging.TransactionIdInterceptor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -28,6 +29,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    @LoadBalanced
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }

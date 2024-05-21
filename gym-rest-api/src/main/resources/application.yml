@@ -1,9 +1,21 @@
 spring:
+  application:
+    name: main-gym-api
   profiles:
     active: dev
   jpa:
     show-sql: true
     open-in-view: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: "http://localhost:8761/eureka"
+
+svc:
+  workload-svc:
+    name: "trainer-work-service"
+    update-session-endpoint: "/api/v1/trainings/workload"
 
 logging:
   level:
@@ -38,3 +50,20 @@ security:
   login:
     max-attempts: 3
     timeout: 30 #minutes
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        register-health-indicator: true
+        slidingWindowSize: 100
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10000
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowType: COUNT_BASED
+        slowCallDurationThreshold: 2000
+        slowCallRateThreshold: 50
+    instances:
+      trainerWorkService:
+        base-config: default
