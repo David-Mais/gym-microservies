@@ -29,7 +29,7 @@ public class LoggingAspect {
                 .replaceAll("token=[^,]+", "token=***");
 
         log.info("Transaction ID: {}, Endpoint: {}.{}(), Response: {}",
-                UUID.randomUUID(),
+                MDC.get("transactionId"),
                 className, methodName, responseToLog);
     }
 

@@ -16,6 +16,7 @@ public class TransactionIdInterceptor implements HandlerInterceptor {
                              @NonNull Object handler) {
         String transactionId = UUID.randomUUID().toString();
         MDC.put("transactionId", transactionId);
+        request.setAttribute("transactionId", transactionId);
         return true;
     }
 
