@@ -1,6 +1,5 @@
 package com.davidmaisuradze.gymapplication.service.impl;
 
-import com.davidmaisuradze.gymapplication.client.WorkloadServiceClient;
 import com.davidmaisuradze.gymapplication.dto.training.CreateTrainingDto;
 import com.davidmaisuradze.gymapplication.dto.workload.ActionType;
 import com.davidmaisuradze.gymapplication.dto.workload.TrainerWorkloadRequest;
@@ -9,6 +8,7 @@ import com.davidmaisuradze.gymapplication.entity.Trainer;
 import com.davidmaisuradze.gymapplication.entity.Training;
 import com.davidmaisuradze.gymapplication.entity.TrainingType;
 import com.davidmaisuradze.gymapplication.mapper.TrainingMapper;
+import com.davidmaisuradze.gymapplication.message.WorkloadMessageSender;
 import com.davidmaisuradze.gymapplication.repository.TrainingRepository;
 import com.davidmaisuradze.gymapplication.service.TraineeService;
 import com.davidmaisuradze.gymapplication.service.TrainerService;
@@ -29,7 +29,7 @@ public class TrainingServiceImpl implements TrainingService {
     private final TrainerService trainerService;
     private final TrainingRepository trainingRepository;
     private final TrainingMapper trainingMapper;
-    private final WorkloadServiceClient workloadServiceClient;
+    private final WorkloadMessageSender workloadMessageSender;
 
     @Override
     @Transactional
@@ -56,7 +56,7 @@ public class TrainingServiceImpl implements TrainingService {
         TrainerWorkloadRequest workloadRequest = trainingMapper.trainingToTrainerWorkloadRequest(training);
         workloadRequest.setActionType(ActionType.ADD);
 
-        workloadServiceClient.sendWorkload(workloadRequest);
+        workloadMessageSender.sendWorkloadMessage(workloadRequest);
     }
 
     private Trainee findTraineeProfileByUsername(String username) {

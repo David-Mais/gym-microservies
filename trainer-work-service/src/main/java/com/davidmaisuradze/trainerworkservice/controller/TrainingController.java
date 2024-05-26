@@ -1,14 +1,11 @@
 package com.davidmaisuradze.trainerworkservice.controller;
 
-import com.davidmaisuradze.trainerworkservice.dto.TrainerWorkloadRequest;
 import com.davidmaisuradze.trainerworkservice.dto.WorkSummaryDto;
 import com.davidmaisuradze.trainerworkservice.service.TrainerWorkSummaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,14 +16,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TrainingController {
     private final TrainerWorkSummaryService trainerService;
-
-    @PostMapping("/workload")
-    public ResponseEntity<Void> trainerWorkload(
-            @RequestBody TrainerWorkloadRequest trainerWorkload
-    ) {
-        trainerService.addWorkload(trainerWorkload);
-        return ResponseEntity.ok().build();
-    }
 
     @GetMapping
     public ResponseEntity<List<WorkSummaryDto>> all() {

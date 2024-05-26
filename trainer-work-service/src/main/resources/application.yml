@@ -1,4 +1,8 @@
 spring:
+  activemq:
+    broker-url: "tcp://localhost:61616"
+    user: "admin"
+    password: "admin"
   h2:
     console:
       enabled: true
@@ -19,6 +23,10 @@ spring:
       mode: always
   application:
     name: trainer-work-service
+
+messaging:
+  jms:
+    destination: "workload-queue"
 
 server:
   port: 8081

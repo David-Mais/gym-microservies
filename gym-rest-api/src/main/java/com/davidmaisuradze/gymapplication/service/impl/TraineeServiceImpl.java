@@ -1,6 +1,5 @@
 package com.davidmaisuradze.gymapplication.service.impl;
 
-import com.davidmaisuradze.gymapplication.client.WorkloadServiceClient;
 import com.davidmaisuradze.gymapplication.dto.ActiveStatusDto;
 import com.davidmaisuradze.gymapplication.dto.security.RegistrationResponse;
 import com.davidmaisuradze.gymapplication.dto.trainee.CreateTraineeDto;
@@ -19,6 +18,7 @@ import com.davidmaisuradze.gymapplication.mapper.TraineeMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainerMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainingMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainingTypeMapper;
+import com.davidmaisuradze.gymapplication.message.WorkloadMessageSender;
 import com.davidmaisuradze.gymapplication.repository.TraineeRepository;
 import com.davidmaisuradze.gymapplication.repository.TrainerRepository;
 import com.davidmaisuradze.gymapplication.repository.TrainingTypeRepository;
@@ -50,7 +50,7 @@ public class TraineeServiceImpl implements TraineeService {
     private final TrainingTypeMapper trainingTypeMapper;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final WorkloadServiceClient workloadServiceClient;
+    private final WorkloadMessageSender workloadMessageSender;
 
     @Override
     @Transactional
@@ -239,7 +239,7 @@ public class TraineeServiceImpl implements TraineeService {
         for (Training training : trainings) {
             TrainerWorkloadRequest request = trainingMapper.trainingToTrainerWorkloadRequest(training);
             request.setActionType(ActionType.DELETE);
-            workloadServiceClient.sendWorkload(request);
+            workloadMessageSender.sendWorkloadMessage(request);
         }
     }
 }

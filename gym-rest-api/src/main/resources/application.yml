@@ -1,4 +1,8 @@
 spring:
+  activemq:
+    broker-url: "tcp://localhost:61616"
+    user: "admin"
+    password: "admin"
   application:
     name: main-gym-api
   profiles:
@@ -12,10 +16,9 @@ eureka:
     service-url:
       defaultZone: "http://localhost:8761/eureka"
 
-svc:
-  workload-svc:
-    name: "trainer-work-service"
-    update-session-endpoint: "/api/v1/trainings/workload"
+messaging:
+  jms:
+    destination: "workload-queue"
 
 logging:
   level:

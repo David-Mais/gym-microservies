@@ -29,10 +29,35 @@ services:
       - monitoring
 
 
+  activemq:
+    image: apache/activemq-classic
+    container_name: activemq
+    environment:
+      ACTIVEMQ_NAME: 'localhost'
+      ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: 'true'
+      ACTIVEMQ_ADMIN_LOGIN: 'admin'
+      ACTIVEMQ_ADMIN_PASSWORD: 'admin'
+      ACTIVEMQ_CONFIG_MIN_MEMORY: '512'
+      ACTIVEMQ_CONFIG_MAX_MEMORY: '2048'
+      ACTIVEMQ_ENABLED_SCHEDULER: 'true'
+    ports:
+      - "61616:61616" # broker
+      - "8161:8161"   # web
+    networks:
+      - activemq_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+
 volumes:
   grafana-data:
 
 
 networks:
   monitoring:
+    driver: bridge
+  activemq_net:
     driver: bridge
