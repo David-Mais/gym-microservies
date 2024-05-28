@@ -45,6 +45,7 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final LogoutHandler logoutHandler;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -125,6 +126,6 @@ public class SecurityConfig {
     private void writeErrorResponse(HttpServletResponse response, HttpStatus status, ErrorDto errorDto) throws IOException {
         response.setStatus(status.value());
         response.setContentType("application/json");
-        response.getWriter().write(new ObjectMapper().writeValueAsString(errorDto));
+        response.getWriter().write(objectMapper.writeValueAsString(errorDto));
     }
 }

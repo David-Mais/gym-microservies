@@ -1,39 +1,29 @@
 package com.davidmaisuradze.trainerworkservice.config.logging;
 
+import com.davidmaisuradze.trainerworkservice.dto.TrainerWorkloadRequest;
+import jakarta.jms.Message;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-
 
 @Aspect
 @Component
 @Slf4j
 public class LoggingAspect {
-    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
-    public void restController() {
+    @Pointcut(value = "execution(* com.davidmaisuradze.trainerworkservice.message..*(..)) && args(request, message)", argNames = "request,message")
+    public void loggableMethods(TrainerWorkloadRequest request, Message message) {}
+
+    @Before(value = "loggableMethods(request, message)", argNames = "request,message")
+    public void logBefore(TrainerWorkloadRequest request, Message message) throws Exception {
+        String transactionId = message.getStringProperty("transactionId");
+        log.info("TransactionId: {}, message read by WorkloadMessageListener", transactionId);
     }
 
-    @AfterReturning(pointcut = "restController()", returning = "result")
-    public void logAfterReturning(JoinPoint joinPoint, Object result) {
-        String methodName = joinPoint.getSignature().getName();
-        String className = joinPoint.getTarget().getClass().getSimpleName();
-
-        String responseToLog = result.toString()
-                .replaceAll("password=[^,]+", "password=***")
-                .replaceAll("token=[^,]+", "token=***");
-
-        log.info("Transaction ID: {}, Endpoint: {}.{}(), Response: {}",
-                MDC.get("transactionId"),
-                className, methodName, responseToLog);
-    }
-
-    @AfterThrowing(pointcut = "restController()", throwing = "e")
-    public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        log.error("Transaction ID: {}, Endpoint: {}, Error: {}", MDC.get("transactionId"), joinPoint.getSignature().toShortString(), e.getMessage());
+    @AfterThrowing(pointcut = "loggableMethods(request, message)", throwing = "e", argNames = "request,message,e")
+    public void logAfterThrowing(TrainerWorkloadRequest request, Message message, Exception e) {
+        log.error("Error processing message: {}", e.getMessage());
     }
 }

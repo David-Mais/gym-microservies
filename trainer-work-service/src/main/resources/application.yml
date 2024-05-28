@@ -3,6 +3,8 @@ spring:
     broker-url: "tcp://localhost:61616"
     user: "admin"
     password: "admin"
+    packages:
+      trust-all: true
   h2:
     console:
       enabled: true
@@ -26,7 +28,8 @@ spring:
 
 messaging:
   jms:
-    destination: "workload-queue"
+    destinations:
+      main: "workload-queue"
 
 server:
   port: 8081

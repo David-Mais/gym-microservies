@@ -4,19 +4,17 @@ services:
   prometheus:
     image: prom/prometheus
     volumes:
-      - ./src/main/resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./gym-rest-api/src/main/resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
     restart: unless-stopped
-    networks:
-      - monitoring
 
   grafana:
     image: grafana/grafana
     volumes:
       - grafana-data:/var/lib/grafana
-      - ./src/main/resources/grafana/dashboards:/etc/grafana/provisioning/dashboards
-      - ./src/main/resources/grafana/provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
+      - ./gym-rest-api/src/main/resources/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./gym-rest-api/src/main/resources/grafana/provisioning/dashboards/dashboards.yml:/etc/grafana/provisioning/dashboards/dashboards.yml
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -25,8 +23,6 @@ services:
     depends_on:
       - prometheus
     restart: unless-stopped
-    networks:
-      - monitoring
 
 
   activemq:
@@ -37,27 +33,13 @@ services:
       ACTIVEMQ_REMOVE_DEFAULT_ACCOUNT: 'true'
       ACTIVEMQ_ADMIN_LOGIN: 'admin'
       ACTIVEMQ_ADMIN_PASSWORD: 'admin'
-      ACTIVEMQ_CONFIG_MIN_MEMORY: '512'
-      ACTIVEMQ_CONFIG_MAX_MEMORY: '2048'
-      ACTIVEMQ_ENABLED_SCHEDULER: 'true'
     ports:
       - "61616:61616" # broker
       - "8161:8161"   # web
-    networks:
-      - activemq_net
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+    volumes:
+      - ./activemq/data:/opt/apache-activemq/data
+      - ./activemq/conf/activemq.xml:/opt/apache-activemq/conf/activemq.xml
 
 
 volumes:
   grafana-data:
-
-
-networks:
-  monitoring:
-    driver: bridge
-  activemq_net:
-    driver: bridge

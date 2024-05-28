@@ -36,3 +36,15 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+
+# Ignore everything in activemq
+activemq/*
+
+# Do not ignore the conf directory and its contents
+!activemq/conf/
+!activemq/conf/**
+
+# Do not ignore the data directory, but ignore its contents
+!activemq/data/
+activemq/data/*
+
