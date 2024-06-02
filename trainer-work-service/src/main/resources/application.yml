@@ -5,14 +5,16 @@ spring:
     password: "admin"
     packages:
       trust-all: true
-  h2:
-    console:
-      enabled: true
+  application:
+    name: trainer-work-service
   datasource:
     url: jdbc:h2:mem:trainerdb;DB_CLOSE_DELAY=-1
     username: sa
     password: pass
     driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
   jpa:
     defer-datasource-initialization: true
     hibernate:
@@ -23,25 +25,15 @@ spring:
   sql:
     init:
       mode: always
-  application:
-    name: trainer-work-service
+
+security:
+  jwt:
+    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'
+
+server:
+  port: 8081
 
 messaging:
   jms:
     destinations:
       main: "workload-queue"
-
-server:
-  port: 8081
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka
-  instance:
-    lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
-
-security:
-  jwt:
-    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'

@@ -19,7 +19,7 @@ public class LoggingAspect {
     @Before(value = "loggableMethods(request, message)", argNames = "request,message")
     public void logBefore(TrainerWorkloadRequest request, Message message) throws Exception {
         String transactionId = message.getStringProperty("transactionId");
-        log.info("TransactionId: {}, message read by WorkloadMessageListener", transactionId);
+        log.info("TransactionId: {}, workload added to trainer list", transactionId);
     }
 
     @AfterThrowing(pointcut = "loggableMethods(request, message)", throwing = "e", argNames = "request,message,e")

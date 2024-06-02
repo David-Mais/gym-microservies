@@ -27,7 +27,7 @@ public class WorkloadMessageListener {
             String jwtToken = message.getStringProperty("Authorization");
             if (jwtToken != null && jwtToken.startsWith("Bearer ")) {
                 jwtToken = jwtToken.substring(7);
-                if (jwtTokenProvider.isTokenValid(jwtToken)) {
+                if (jwtTokenProvider.isTokenExpired(jwtToken)) {
                     trainerWorkSummaryService.addWorkload(request);
                 } else {
                     throw new WorkloadException("JWT token not valid", "401");

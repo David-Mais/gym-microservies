@@ -95,13 +95,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Spring cloud -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>${spring-cloud.version}</version>
-        </dependency>
-
         <!-- ActiveMQ JMS -->
         <dependency>
             <groupId>org.apache.activemq</groupId>

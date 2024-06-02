@@ -18,20 +18,12 @@ public class JwtTokenProvider {
     @Value("${security.jwt.secret}")
     private String secret;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    public boolean isTokenValid(String token) {
-        return isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return !extractExpiration(token).before(new Date());
     }
 
