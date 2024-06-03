@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.YearMonth;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,8 +52,7 @@ public class TrainerWorkSummaryServiceImpl implements TrainerWorkSummaryService 
                 .orElseGet(() -> {
                     YearlySummary ys = new YearlySummary();
                     ys.setYear(yearMonth.getYear());
-                    ys.setTrainerWorkSummary(trainer);
-                    ys.setMonthlySummaries(new HashSet<>());
+                    ys.setMonthlySummaries(new ArrayList<>());
                     trainer.getYearlySummaries().add(ys);
                     return ys;
                 });
@@ -64,7 +63,6 @@ public class TrainerWorkSummaryServiceImpl implements TrainerWorkSummaryService 
                 .orElseGet(() -> {
                     MonthlySummary ms = new MonthlySummary();
                     ms.setMonth(yearMonth.getMonth());
-                    ms.setYearlySummary(yearlySummary);
                     yearlySummary.getMonthlySummaries().add(ms);
                     return ms;
                 });
@@ -95,7 +93,7 @@ public class TrainerWorkSummaryServiceImpl implements TrainerWorkSummaryService 
             trainer.setFirstName(requestDto.getFirstName());
             trainer.setLastName(requestDto.getLastName());
             trainer.setStatus(requestDto.getIsActive());
-            trainer.setYearlySummaries(new HashSet<>());
+            trainer.setYearlySummaries(new ArrayList<>());
         }
         return trainer;
     }

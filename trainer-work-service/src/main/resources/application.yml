@@ -7,11 +7,13 @@ spring:
       trust-all: true
   application:
     name: trainer-work-service
-  datasource:
-    url: jdbc:h2:mem:trainerdb;DB_CLOSE_DELAY=-1
-    username: sa
-    password: pass
-    driver-class-name: org.h2.Driver
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: trainer-workload
+      authentication-database: admin
+      auto-index-creation: true
   h2:
     console:
       enabled: true

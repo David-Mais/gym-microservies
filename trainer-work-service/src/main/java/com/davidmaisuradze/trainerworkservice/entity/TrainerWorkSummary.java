@@ -1,23 +1,18 @@
 package com.davidmaisuradze.trainerworkservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import java.util.List;
 
 
-@Entity
+@Document(collection = "trainer_workload")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,14 +20,13 @@ import java.util.Set;
 @Setter
 public class TrainerWorkSummary {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
+    @Indexed
     private String username;
+    @Indexed
     private String firstName;
+    @Indexed
     private String lastName;
     private Boolean status;
-
-    @OneToMany(mappedBy = "trainerWorkSummary", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
-    private Set<YearlySummary> yearlySummaries;
+    private List<YearlySummary> yearlySummaries;
 }
