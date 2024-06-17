@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class WorkloadMessageSender {
+public class WorkloadMessageProducer {
     @Value("${messaging.jms.destination}")
     private String destination;
     private final JmsTemplate jmsTemplate;

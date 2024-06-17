@@ -8,7 +8,7 @@ import com.davidmaisuradze.gymapplication.entity.Trainer;
 import com.davidmaisuradze.gymapplication.entity.Training;
 import com.davidmaisuradze.gymapplication.entity.TrainingType;
 import com.davidmaisuradze.gymapplication.mapper.TrainingMapper;
-import com.davidmaisuradze.gymapplication.message.WorkloadMessageSender;
+import com.davidmaisuradze.gymapplication.message.WorkloadMessageProducer;
 import com.davidmaisuradze.gymapplication.repository.TrainingRepository;
 import com.davidmaisuradze.gymapplication.service.TraineeService;
 import com.davidmaisuradze.gymapplication.service.TrainerService;
@@ -29,7 +29,7 @@ public class TrainingServiceImpl implements TrainingService {
     private final TrainerService trainerService;
     private final TrainingRepository trainingRepository;
     private final TrainingMapper trainingMapper;
-    private final WorkloadMessageSender workloadMessageSender;
+    private final WorkloadMessageProducer workloadMessageProducer;
 
     @Override
     @Transactional
@@ -56,7 +56,7 @@ public class TrainingServiceImpl implements TrainingService {
         TrainerWorkloadRequest workloadRequest = trainingMapper.trainingToTrainerWorkloadRequest(training);
         workloadRequest.setActionType(ActionType.ADD);
 
-        workloadMessageSender.sendWorkloadMessage(workloadRequest);
+        workloadMessageProducer.sendWorkloadMessage(workloadRequest);
     }
 
     private Trainee findTraineeProfileByUsername(String username) {

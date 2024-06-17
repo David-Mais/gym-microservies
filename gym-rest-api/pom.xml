@@ -33,6 +33,8 @@
         <h2.version>2.2.224</h2.version>
         <junit.version>5.7.2</junit.version>
         <mockito.version>5.11.0</mockito.version>
+        <cucumber.version>7.18.0</cucumber.version>
+        <junit-suite.version>1.9.1</junit-suite.version>
 
         <!-- Persistence and Database -->
         <mysql-connector-java.version>8.0.33</mysql-connector-java.version>
@@ -150,6 +152,29 @@
             <artifactId>mockito-junit-jupiter</artifactId>
             <version>${mockito.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit-platform-engine</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite</artifactId>
+            <version>${junit-suite.version}</version>
         </dependency>
 
 

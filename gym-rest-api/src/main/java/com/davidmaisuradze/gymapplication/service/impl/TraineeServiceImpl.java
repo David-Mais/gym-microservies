@@ -18,7 +18,7 @@ import com.davidmaisuradze.gymapplication.mapper.TraineeMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainerMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainingMapper;
 import com.davidmaisuradze.gymapplication.mapper.TrainingTypeMapper;
-import com.davidmaisuradze.gymapplication.message.WorkloadMessageSender;
+import com.davidmaisuradze.gymapplication.message.WorkloadMessageProducer;
 import com.davidmaisuradze.gymapplication.repository.TraineeRepository;
 import com.davidmaisuradze.gymapplication.repository.TrainerRepository;
 import com.davidmaisuradze.gymapplication.repository.TrainingTypeRepository;
@@ -50,7 +50,7 @@ public class TraineeServiceImpl implements TraineeService {
     private final TrainingTypeMapper trainingTypeMapper;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
-    private final WorkloadMessageSender workloadMessageSender;
+    private final WorkloadMessageProducer workloadMessageProducer;
 
     @Override
     @Transactional
@@ -239,7 +239,7 @@ public class TraineeServiceImpl implements TraineeService {
         for (Training training : trainings) {
             TrainerWorkloadRequest request = trainingMapper.trainingToTrainerWorkloadRequest(training);
             request.setActionType(ActionType.DELETE);
-            workloadMessageSender.sendWorkloadMessage(request);
+            workloadMessageProducer.sendWorkloadMessage(request);
         }
     }
 }
