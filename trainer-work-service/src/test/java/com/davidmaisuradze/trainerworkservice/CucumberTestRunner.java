@@ -11,7 +11,7 @@ import static io.cucumber.core.options.Constants.PLUGIN_PROPERTY_NAME;
 @Suite
 @IncludeEngines("cucumber")
 @SelectClasspathResource("features")
-@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.davidmaisuradze.trainerworkservice.service,com.davidmaisuradze.trainerworkservice.message")
+@ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.davidmaisuradze.trainerworkservice")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
 public class CucumberTestRunner {
 }

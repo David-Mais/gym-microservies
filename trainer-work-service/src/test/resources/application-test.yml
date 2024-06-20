@@ -1,0 +1,6 @@
+spring:
+  activemq:
+    broker-url: vm://localhost
+    in-memory: true
+    pool:
+      enabled: false
