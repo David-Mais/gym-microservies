@@ -1,18 +1,25 @@
 spring:
   activemq:
-    broker-url: "tcp://localhost:61616"
-    user: "admin"
-    password: "admin"
+    broker-url: "${ACTIVEMQ_BROKER_URL:tcp://localhost:61616}"
+    user: "${ACTIVEMQ_USER:admin}"
+    password: "${ACTIVEMQ_PASSWORD:admin}"
     packages:
       trust-all: true
   application:
     name: trainer-work-service
   data:
     mongodb:
-      host: localhost
+      host: workloaddb
       port: 27017
-      database: trainer-workload
       authentication-database: admin
+      username: admin
+      password: password
+#      host: "${MONGODB_HOST:localhost}"
+#      port: "${MONGODB_PORT:27017}"
+#      database: "${MONGODB_DATABASE:trainer-workload}"
+#      username: "${MONGODB_USERNAME:admin}"
+#      password: "${MONGODB_PASSWORD:password}"
+#      authentication-database: admin
       auto-index-creation: true
   h2:
     console:
@@ -30,12 +37,12 @@ spring:
 
 security:
   jwt:
-    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'
+    secret: "${JWT_SECRET:92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17}"
 
 server:
-  port: 8081
+  port: "${SERVER_PORT:8081}"
 
 messaging:
   jms:
     destinations:
-      main: "workload-queue"
+      main: "${JMS_DESTINATION_MAIN:workload-queue}"

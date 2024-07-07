@@ -6,6 +6,7 @@
 
 # IntelliJ
 out/
+.env
 
 # Maven template
 target/

@@ -41,5 +41,42 @@ services:
       - ./activemq/conf/activemq.xml:/opt/apache-activemq/conf/activemq.xml
 
 
+  mongodb:
+    image: mongo:4.2
+    container_name: workloaddb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: trainer-workload
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  trainer-workload-service:
+    build:
+      context: ./trainer-work-service
+      dockerfile: Dockerfile
+    image: trainer_workload_service
+    environment:
+      ACTIVEMQ_BROKER_URL: tcp://activemq:61616
+      ACTIVEMQ_USER: admin
+      ACTIVEMQ_PASSWORD: admin
+      MONGODB_HOST: workloaddb
+      MONGODB_PORT: 27017
+      MONGODB_DATABASE: trainer-workload
+      MONGODB_USERNAME: admin
+      MONGODB_PASSWORD: password
+      MONGODB_AUTH_DB: trainer-workload
+      JWT_SECRET: 92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17
+      SERVER_PORT: 8081
+      JMS_DESTINATION_MAIN: workload-queue
+    depends_on:
+      - activemq
+      - mongodb
+    ports:
+      - "8081:8081"
+
 volumes:
   grafana-data:
+  mongodb-data:
