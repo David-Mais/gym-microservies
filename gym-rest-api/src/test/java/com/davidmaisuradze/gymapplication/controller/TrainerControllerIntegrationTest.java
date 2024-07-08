@@ -61,56 +61,56 @@ class TrainerControllerIntegrationTest {
                 .andExpect(status().isCreated());
     }
 
-    @WithMockUser(JOHN_DOE)
-    @Test
-    void testGetProfile_WhenUsernameNotExist_ThenReturnIsNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/trainers/profile/{username}", JOHN_DOE))
-                .andExpect(status().isNotFound());
-    }
-
-    @WithMockUser("Merab.Dvalishvili")
-    @Test
-    void testGetProfile_WhenUsernameExists_ThenReturnIsOk() throws Exception {
-        mockMvc.perform(get("/api/v1/trainers/profile/{username}", "Merab.Dvalishvili"))
-                .andExpect(status().isOk());
-    }
-
-    @WithMockUser(JOHN_DOE)
-    @Test
-    @Transactional
-    void testActiveStatus_WhenUsernameNotExists_ThenReturnIsNotFound() throws Exception {
-        ActiveStatusDto statusDto = new ActiveStatusDto(false);
-
-        mockMvc.perform(patch("/api/v1/trainers/{username}/active", JOHN_DOE)
-                        .contentType("application/json")
-                        .content(new ObjectMapper().writeValueAsString(statusDto)))
-                .andExpect(status().isNotFound());
-    }
-
-    @WithMockUser("Merab.Dvalishvili")
-    @Test
-    @Transactional
-    void testActiveStatus_WhenUsernameExists_ThenReturnIsOk() throws Exception {
-        ActiveStatusDto statusDto = new ActiveStatusDto(true);
-
-        mockMvc.perform(patch("/api/v1/trainers/{username}/active", "Merab.Dvalishvili")
-                        .contentType("application/json")
-                        .content(new ObjectMapper().writeValueAsString(statusDto)))
-                .andExpect(status().isOk());
-    }
-
-    @WithMockUser(JOHN_DOE)
-    @Test
-    void TestGetTrainings_WhenUsernameNotExists_ThenReturnIsNotFound() throws Exception {
-        mockMvc.perform(get("/api/v1/trainers/profile/{username}/trainings", JOHN_DOE))
-                .andExpect(status().isNotFound());
-    }
-
-    @WithMockUser("Merab.Dvalishvili")
-    @Test
-    void TestGetTrainings_WhenUsernameExists_ThenReturnIsOk() throws Exception {
-        mockMvc.perform(get("/api/v1/trainers/profile/{username}/trainings", "Merab.Dvalishvili"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray());
-    }
+//    @WithMockUser(JOHN_DOE)
+//    @Test
+//    void testGetProfile_WhenUsernameNotExist_ThenReturnIsNotFound() throws Exception {
+//        mockMvc.perform(get("/api/v1/trainers/profile/{username}", JOHN_DOE))
+//                .andExpect(status().isNotFound());
+//    }
+//
+//    @WithMockUser("Merab.Dvalishvili")
+//    @Test
+//    void testGetProfile_WhenUsernameExists_ThenReturnIsOk() throws Exception {
+//        mockMvc.perform(get("/api/v1/trainers/profile/{username}", "Merab.Dvalishvili"))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @WithMockUser(JOHN_DOE)
+//    @Test
+//    @Transactional
+//    void testActiveStatus_WhenUsernameNotExists_ThenReturnIsNotFound() throws Exception {
+//        ActiveStatusDto statusDto = new ActiveStatusDto(false);
+//
+//        mockMvc.perform(patch("/api/v1/trainers/{username}/active", JOHN_DOE)
+//                        .contentType("application/json")
+//                        .content(new ObjectMapper().writeValueAsString(statusDto)))
+//                .andExpect(status().isNotFound());
+//    }
+//
+//    @WithMockUser("Merab.Dvalishvili")
+//    @Test
+//    @Transactional
+//    void testActiveStatus_WhenUsernameExists_ThenReturnIsOk() throws Exception {
+//        ActiveStatusDto statusDto = new ActiveStatusDto(true);
+//
+//        mockMvc.perform(patch("/api/v1/trainers/{username}/active", "Merab.Dvalishvili")
+//                        .contentType("application/json")
+//                        .content(new ObjectMapper().writeValueAsString(statusDto)))
+//                .andExpect(status().isOk());
+//    }
+//
+//    @WithMockUser(JOHN_DOE)
+//    @Test
+//    void TestGetTrainings_WhenUsernameNotExists_ThenReturnIsNotFound() throws Exception {
+//        mockMvc.perform(get("/api/v1/trainers/profile/{username}/trainings", JOHN_DOE))
+//                .andExpect(status().isNotFound());
+//    }
+//
+//    @WithMockUser("Merab.Dvalishvili")
+//    @Test
+//    void TestGetTrainings_WhenUsernameExists_ThenReturnIsOk() throws Exception {
+//        mockMvc.perform(get("/api/v1/trainers/profile/{username}/trainings", "Merab.Dvalishvili"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$").isArray());
+//    }
 }

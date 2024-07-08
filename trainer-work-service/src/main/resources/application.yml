@@ -9,17 +9,11 @@ spring:
     name: trainer-work-service
   data:
     mongodb:
-      host: workloaddb
-      port: 27017
+      host: "${MONGODB_HOST:localhost}"
+      port: "${MONGODB_PORT:27017}"
       authentication-database: admin
-      username: admin
-      password: password
-#      host: "${MONGODB_HOST:localhost}"
-#      port: "${MONGODB_PORT:27017}"
-#      database: "${MONGODB_DATABASE:trainer-workload}"
-#      username: "${MONGODB_USERNAME:admin}"
-#      password: "${MONGODB_PASSWORD:password}"
-#      authentication-database: admin
+      username: "${MONGODB_USERNAME:admin}"
+      password: "${MONGODB_PASSWORD:admin}"
       auto-index-creation: true
   h2:
     console:

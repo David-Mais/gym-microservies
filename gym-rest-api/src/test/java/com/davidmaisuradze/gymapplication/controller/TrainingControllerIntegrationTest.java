@@ -65,6 +65,6 @@ class TrainingControllerIntegrationTest {
                         .content(objectMapper
                                 .registerModule(new JavaTimeModule())
                                 .writeValueAsString(createTrainingDto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }

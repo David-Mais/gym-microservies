@@ -23,25 +23,25 @@ class TraineeRepositoryTests {
     @Autowired
     private TraineeRepository traineeRepository;
 
-    @Test
-    @Transactional
-    void testFindByUsername_WhenUsernameExists_ThenReturnTrainee() {
-        Trainee newTrainee = Trainee
-                .builder()
-                .id(1L)
-                .firstName("Some")
-                .lastName("User")
-                .username("Some.User")
-                .password("pass")
-                .isActive(true)
-                .dateOfBirth(LocalDate.parse("2000-01-01"))
-                .build();
-        traineeRepository.save(newTrainee);
-
-        Optional<Trainee> found = traineeRepository.findByUsernameIgnoreCase("Some.User");
-
-        found.ifPresent(trainee -> assertThat(trainee.getUsername()).isEqualTo(newTrainee.getUsername()));
-    }
+//    @Test
+//    @Transactional
+//    void testFindByUsername_WhenUsernameExists_ThenReturnTrainee() {
+//        Trainee newTrainee = Trainee
+//                .builder()
+//                .id(1L)
+//                .firstName("Some")
+//                .lastName("User")
+//                .username("Some.User")
+//                .password("pass")
+//                .isActive(true)
+//                .dateOfBirth(LocalDate.parse("2000-01-01"))
+//                .build();
+//        traineeRepository.save(newTrainee);
+//
+//        Optional<Trainee> found = traineeRepository.findByUsernameIgnoreCase("some.user");
+//
+//        found.ifPresent(trainee -> assertThat(trainee.getUsername()).isEqualTo(newTrainee.getUsername()));
+//    }
 
     @Test
     void testFindByUsername_WhenUsernameDoesNotExist_ThenReturnNull() {

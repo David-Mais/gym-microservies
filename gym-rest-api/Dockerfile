@@ -7,6 +7,6 @@ WORKDIR /app
 # Ensure the JAR file name is correct
 COPY target/*.jar /app/app.jar
 
-EXPOSE 8081
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]

@@ -1,21 +1,21 @@
 spring:
   activemq:
-    broker-url: "tcp://localhost:61616"
-    user: "admin"
-    password: "admin"
+    broker-url: "${ACTIVEMQ_BROKER_URL:tcp://localhost:61616}"
+    user: "${ACTIVEMQ_USER:admin}"
+    password: "${ACTIVEMQ_PASSWORD:admin}"
     packages:
       trust-all: true
   application:
     name: main-gym-api
   profiles:
-    active: dev
+    active: "${SPRING_ACTIVE_PROFILE:dev}"
   jpa:
     show-sql: true
     open-in-view: true
 
 messaging:
   jms:
-    destination: "workload-queue"
+    destination: "${JMS_DESTINATION_MAIN:workload-queue}"
 
 logging:
   level:
@@ -45,7 +45,7 @@ management:
 
 security:
   jwt:
-    secret: '92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17'
+    secret: "${JWT_SECRET:92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17}"
     expiration: 20000000 # 1000 * 60 * 24 = 24 HOURS
   login:
     max-attempts: 3

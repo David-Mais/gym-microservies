@@ -7,7 +7,6 @@ services:
       - ./gym-rest-api/src/main/resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - "9090:9090"
-    restart: unless-stopped
 
   grafana:
     image: grafana/grafana
@@ -22,7 +21,6 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
-    restart: unless-stopped
 
 
   activemq:
@@ -42,40 +40,50 @@ services:
 
 
   mongodb:
-    image: mongo:4.2
-    container_name: workloaddb
+    image: mongo:7.0.12
+    container_name: ${MONGODB_HOST}
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
       MONGO_INITDB_DATABASE: trainer-workload
     ports:
       - "27017:27017"
     volumes:
-      - mongodb-data:/data/db
+      - ./mongodb-data:/data/db
 
   trainer-workload-service:
-    build:
-      context: ./trainer-work-service
-      dockerfile: Dockerfile
-    image: trainer_workload_service
+    build: ./trainer-work-service
     environment:
-      ACTIVEMQ_BROKER_URL: tcp://activemq:61616
-      ACTIVEMQ_USER: admin
-      ACTIVEMQ_PASSWORD: admin
-      MONGODB_HOST: workloaddb
-      MONGODB_PORT: 27017
-      MONGODB_DATABASE: trainer-workload
-      MONGODB_USERNAME: admin
-      MONGODB_PASSWORD: password
-      MONGODB_AUTH_DB: trainer-workload
-      JWT_SECRET: 92898efcc0d1de074c41bec111add6ae654e20c5cb53f0418d68c0ba055fdd17
+      ACTIVEMQ_BROKER_URL: ${ACTIVEMQ_BROKER_URL}
+      ACTIVEMQ_USER: ${ACTIVEMQ_USER}
+      ACTIVEMQ_PASSWORD: ${ACTIVEMQ_PASSWORD}
+      MONGODB_HOST: ${MONGODB_HOST}
+      MONGODB_PORT: ${MONGODB_PORT}
+      MONGODB_USERNAME: ${MONGODB_USERNAME}
+      MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
       SERVER_PORT: 8081
-      JMS_DESTINATION_MAIN: workload-queue
+      JMS_DESTINATION_MAIN: ${JMS_DESTINATION_MAIN}
     depends_on:
       - activemq
       - mongodb
     ports:
       - "8081:8081"
+
+  gym-rest-api:
+    build: ./gym-rest-api
+    environment:
+      ACTIVEMQ_BROKER_URL: ${ACTIVEMQ_BROKER_URL}
+      ACTIVEMQ_USER: ${ACTIVEMQ_USER}
+      ACTIVEMQ_PASSWORD: ${ACTIVEMQ_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      SERVER_PORT: 8080
+      JMS_DESTINATION_MAIN: ${JMS_DESTINATION_MAIN}
+      SPRING_ACTIVE_PROFILE: dev
+    depends_on:
+      - activemq
+    ports:
+      - "8080:8080"
 
 volumes:
   grafana-data:
